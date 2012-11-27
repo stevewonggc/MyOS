@@ -64,7 +64,7 @@ void HariMain(void)
 
 	char mcursor[256];
 	init_mouse_cursor8(mcursor, COL8_008484);
-	putblock8_8(binfo->vram, binfo->scrnx, 16, 16, 50, 50, mcursor, 16);
+	putblock8_8(binfo->vram, binfo->scrnx, 16, 16, 180, 180, mcursor, 16);
 
 	for( ; ; )
 	{
@@ -202,17 +202,19 @@ void init_mouse_cursor8(char *mouse, char bc)
 	{
 		for(x = 0; x < 16; x++)
 		{
-			if (cursor[y][x] == "*")
+			switch(cursor[y][x])
 			{
-				mouse[y * 16 + x] = COL8_000000;
-			}
-			if (cursor[y][x] == "0")
-			{
-				mouse[y * 16 + x] = COL8_FFFFFF;
-			}
-			if (cursor[y][x] == ".")
-			{
-				mouse[y * 16 + x] = bc;
+				case '*':
+					mouse[y * 16 + x] = COL8_000000;
+					break;
+				case '0':
+					mouse[y * 16 + x] = COL8_FFFFFF;
+					break;
+				case '.':
+					mouse[y * 16 + x] = bc;
+					break;
+				default:
+					mouse[y * 16 + x] = bc;
 			}
 		}
 	}
@@ -227,8 +229,6 @@ void putblock8_8(char *vram, int vxsize, int pxsize, int pysize, int px0, int py
 		for(x = 0; x < pxsize; x ++)
 		{
 			vram[(py0+y) * vxsize + (px0 + x)] = buf[y * bxsize + x];
-			sprintf(temp, "%d", buf[y * bxsize +x]);
-			putFonts8_asc(vram, vxsize, 8 * (y*16 + x), 50, COL8_000000, temp);
 		}
 	}
 }
